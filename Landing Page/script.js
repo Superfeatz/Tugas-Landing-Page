@@ -1,79 +1,98 @@
-// document.getElementById("leadForm").addEventListener("submit", function(e) {
-//   e.preventDefault();
-//   alert("Terima kasih telah mendaftar! Kami akan segera menghubungi Anda.");
-//   this.reset();
-// });
-
-// document.getElementById('ticketForm').addEventListener('submit', function (e) {
-//   e.preventDefault(); // cegah form kirim default
-
-//   // Ambil nilai input
-//   const name = document.getElementById('name').value.trim();
-//   const email = document.getElementById('email').value.trim();
-//   const phone = document.getElementById('phone').value.trim();
-
-//   // Validasi manual (ekstra di luar required HTML)
-//   if (!name || !email || !phone) {
-//     alert("Semua kolom harus diisi!");
-//     return;
-//   }
-
-//   // Tampilkan isi form
-//   alert(
-//     `Form berhasil dikirim!\n\nNama: ${name}\nEmail: ${email}\nNo. HP: ${phone}`
-//   );
-
-//   // Reset form setelah submit
-//   this.reset();
-// });
-
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('ticketForm');
   const tableBody = document.querySelector('#visitorTable tbody');
+  const dateInput = document.getElementById('bookingDate');
 
- const dummyVisitors = [
-    { name: 'Andi Saputra', email: 'andi@gmail.com', phone: '081234567890' },
-    { name: 'Rina Kartika', email: 'rina@email.com', phone: '082112223333' },
-    { name: 'Budi Wijaya', email: 'budi.wijaya@yahoo.com', phone: '081355556789' },
-    { name: 'Siti Marlina', email: 'siti.marlina@gmail.com', phone: '085612345678' },
-    { name: 'Fajar Nugroho', email: 'fajar.nugroho@outlook.com', phone: '089812345678' }
+  // Set min date = besok
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const yyyy = tomorrow.getFullYear();
+  const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const dd = String(tomorrow.getDate()).padStart(2, '0');
+  const minDate = `${yyyy}-${mm}-${dd}`;
+  dateInput.setAttribute("min", minDate);
+
+  // ✅ 5 Data Dummy
+  const dummyVisitors = [
+    {
+      name: 'Andi Saputra',
+      bookingDate: '2025-09-14',
+      submitTime: '13/09/25 08.15'
+    },
+    {
+      name: 'Rina Kartika',
+      bookingDate: '2025-09-15',
+      submitTime: '13/09/25 08.30'
+    },
+    {
+      name: 'Budi Wijaya',
+      bookingDate: '2025-09-16',
+      submitTime: '13/09/25 08.45'
+    },
+    {
+      name: 'Siti Marlina',
+      bookingDate: '2025-09-17',
+      submitTime: '13/09/25 09.00'
+    },
+    {
+      name: 'Fajar Nugroho',
+      bookingDate: '2025-09-18',
+      submitTime: '13/09/25 09.15'
+    }
   ];
 
   dummyVisitors.forEach(visitor => {
+    const formattedDate = new Date(visitor.bookingDate).toLocaleDateString("id-ID", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>${visitor.name}</td>
-      <td>${visitor.email}</td>
-      <td>${visitor.phone}</td>
+      <td>${visitor.submitTime}</td>
+      <td>${formattedDate}</td>
     `;
     tableBody.appendChild(row);
   });
 
+  // ✅ Submit Form Handler
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
+    const bookingDate = document.getElementById('bookingDate').value;
+    const peopleCount = document.getElementById('peopleCount').value.trim();
 
-    if (!name || !email || !phone) {
+    if (!name || !email || !phone || !bookingDate || !peopleCount) {
       alert("Semua kolom harus diisi!");
       return;
     }
 
-    // Tampilkan alert
-    alert(`Form berhasil dikirim!\n\nNama: ${name}\nEmail: ${email}\nNo. HP: ${phone}`);
+    const now = new Date();
+    const timeString = now.toLocaleString("id-ID", {
+      dateStyle: "short",
+      timeStyle: "short"
+    });
 
-    // Tambahkan data ke tabel
+    const bookingDateFormatted = new Date(bookingDate).toLocaleDateString("id-ID", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+
+    alert(`Form berhasil dikirim!\n\nNama: ${name}\nTanggal Booking: ${bookingDateFormatted}\nJumlah: ${peopleCount} orang`);
+
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
       <td>${name}</td>
-      <td>${email}</td>
-      <td>${phone}</td>
+      <td>${timeString}</td>
+      <td>${bookingDateFormatted}</td>
     `;
     tableBody.appendChild(newRow);
 
-    // Reset form
     form.reset();
+    dateInput.setAttribute("min", minDate);
   });
 });
