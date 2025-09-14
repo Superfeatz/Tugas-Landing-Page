@@ -115,19 +115,31 @@
       <input type="text" id="name" placeholder="Nama Lengkap" required />
       <input type="email" id ="email" placeholder="Email" required />
       <input type="tel" id ="phone" placeholder="Nomor HP" required />
+      <!-- <select id="bookingDay" required>
+        <option value="">Pilih Hari Kunjungan</option>
+        <option>Senin</option>
+        <option>Selasa</option>
+        <option>Rabu</option>
+        <option>Kamis</option>
+        <option>Jumat</option>
+        <option>Sabtu</option>
+        <option>Minggu</option>
+      </select> -->
+      <input type="date" id="bookingDate" required />
+      <input type="number" id="peopleCount" placeholder="Jumlah Orang" min="1" required />
       <button type="submit">Pesan Tiket</button>
     </form>
   </section>
 
-  
+
   <section class="table-section">
   <h2>Data Pengunjung</h2>
   <table id="visitorTable">
     <thead>
       <tr>
         <th>Nama</th>
-        <th>Email</th>
-        <th>Nomor HP</th>
+        <th>Waktu Pemesanan</th>
+        <th>Hari Booking</th>
       </tr>
     </thead>
     <tbody>
